@@ -7,7 +7,7 @@ public class SCP040JPModInfo {
 
     public static void load(ModMetadata meta) {
         meta.modId = SCP040JPCore.MODID;
-        meta.name = SCP040JPCore.MODID;
+        meta.name = "ねこのMODです。";
         meta.description = "このMODは http://www.scp-wiki.net/ の内容をもとに独自に二次創作した内容です。";
         meta.version = SCP040JPCore.VERSION;
         meta.credits = "'Ikr_4185' 氏作 「SCP-040-JP」( http://ja.scp-wiki.net/scp-040-jp )に基づき、CC BY-SA " +
