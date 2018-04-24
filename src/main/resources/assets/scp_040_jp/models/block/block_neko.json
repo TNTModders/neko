@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "scp_040_jp:blocks/block_neko"
+  }
+}

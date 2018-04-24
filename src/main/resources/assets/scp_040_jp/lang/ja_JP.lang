@@ -1,0 +1,4 @@
+#scp_040_jp 日本語言語ファイル
+scp_040_jp.effect_neko=ねこです。
+entity.neko.name=ねこ
+tile.block_neko.name=ねこ

@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "particle": "scp_040_jp:blocks/block_neko"
+    },
+    "model": "scp_040_jp:block_neko",
+    "uvlock": false
+  },
+  "variants": {
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+      }
+    ]
+  }
+}
