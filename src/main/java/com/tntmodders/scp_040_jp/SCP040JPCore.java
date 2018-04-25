@@ -10,17 +10,21 @@ import com.tntmodders.scp_040_jp.world.SCP040JPMapGenNeko;
 import com.tntmodders.scp_040_jp.world.StructureNekoPieces;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.toasts.SystemToast;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
@@ -30,6 +34,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -107,8 +112,30 @@ public class SCP040JPCore {
 
     @SubscribeEvent
     public void onUpdate(LivingUpdateEvent event) {
-
         if (event.getEntityLiving() instanceof EntityPlayer) {
+            if (event.getEntityLiving().getActivePotionEffect(SCP040JPPotionCore.NEKO) != null &&
+                    !event.getEntityLiving().world.isRemote) {
+                event.getEntityLiving().world.getEntities(EntityOcelot.class,
+                        input -> input.getDistanceSqToEntity(event.getEntityLiving()) < 256).forEach(entityOcelot -> {
+                    if (!(entityOcelot instanceof SCP040JPEntityNeko)) {
+                        SCP040JPEntityNeko neko = new SCP040JPEntityNeko(entityOcelot.world);
+                        neko.copyLocationAndAnglesFrom(entityOcelot);
+                        entityOcelot.world.spawnEntity(neko);
+                        entityOcelot.setDead();
+                    }
+                });
+            }
+            if (FMLCommonHandler.instance().getSide().isClient()) {
+                RayTraceResult rayTraceResult = event.getEntityLiving().rayTrace(16, 1.0f);
+                if (event.getEntityLiving().world.getBlockState(rayTraceResult.getBlockPos()).getBlock() == NEKOBLOCK &&
+                        event.getEntityLiving().getActivePotionEffect(SCP040JPPotionCore.NEKO) == null) {
+                    event.getEntityLiving().addPotionEffect(
+                            new PotionEffect(SCP040JPPotionCore.NEKO, Integer.MAX_VALUE, 0, false, false));
+                    if (event.getEntityLiving() instanceof EntityPlayerSP) {
+                        ((EntityPlayerSP) event.getEntityLiving()).sendChatMessage("ねこです。ここにねこがいます。");
+                    }
+                }
+            }
             if (event.getEntityLiving().getActivePotionEffect(SCP040JPPotionCore.NEKO) != null &&
                     event.getEntityLiving().world.getWorldTime() % 100 == 0) {
                 if (!event.getEntityLiving().world.isRemote) {
@@ -149,6 +176,14 @@ public class SCP040JPCore {
             genNeko.generate(event.getWorld(), event.getChunkX(), event.getChunkZ(), null);
             genNeko.generateStructure(event.getWorld(), event.getRand(),
                     new ChunkPos(event.getChunkX(), event.getChunkZ()));
+        }
+    }
+
+    @SubscribeEvent
+    public void chat(ServerChatEvent event) {
+        if (event.getMessage().contains("ねこです")) {
+            event.getPlayer().world.playerEntities.forEach(player -> player.addPotionEffect(
+                    new PotionEffect(SCP040JPPotionCore.NEKO, Integer.MAX_VALUE, 0, false, false)));
         }
     }
 }

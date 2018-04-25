@@ -1200,33 +1200,42 @@ public class StructureNekoPieces {
                 if (this.averageGroundLvl < 0) {
                     return true;
                 }
-
-                this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 3, 0);
+                this.boundingBox.offset(0, -65, 0);
             }
-
+            int y = this.averageGroundLvl - this.boundingBox.maxY + 3;
+            SCP040JPCore.LOGGER.info(blockpos.up(y));
             IBlockState iblockstate = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
             IBlockState iblockstate1 = this.getBiomeSpecificBlockState(Blocks.OAK_FENCE.getDefaultState());
-            this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 4, 12, 4, iblockstate,
+            this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 4, y + 12, 4, iblockstate,
                     SCP040JPCore.NEKOBLOCK.getDefaultState(), false);
-            this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 2, 12, 2, structureBoundingBoxIn);
-            this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 12, 2, structureBoundingBoxIn);
-            this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 2, 12, 3, structureBoundingBoxIn);
-            this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 12, 3, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 1, 13, 1, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 1, 14, 1, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 4, 13, 1, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 4, 14, 1, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 1, 13, 4, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 1, 14, 4, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 4, 13, 4, structureBoundingBoxIn);
-            this.setBlockState(worldIn, iblockstate1, 4, 14, 4, structureBoundingBoxIn);
-            this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 15, 1, 4, 15, 4, iblockstate, iblockstate, false);
+            worldIn.setBlockState(new BlockPos(this.getXWithOffset(0, 0) + 2, 0, this.getZWithOffset(0, 0) + 2),
+                    SCP040JPCore.NEKOBLOCK.getDefaultState());
+            worldIn.setBlockState(new BlockPos(this.getXWithOffset(0, 0) + 3, 0, this.getZWithOffset(0, 0) + 2),
+                    SCP040JPCore.NEKOBLOCK.getDefaultState());
+            worldIn.setBlockState(new BlockPos(this.getXWithOffset(0, 0) + 2, 0, this.getZWithOffset(0, 0) + 3),
+                    SCP040JPCore.NEKOBLOCK.getDefaultState());
+            worldIn.setBlockState(new BlockPos(this.getXWithOffset(0, 0) + 3, 0, this.getZWithOffset(0, 0) + 3),
+                    SCP040JPCore.NEKOBLOCK.getDefaultState());
+            this.setBlockState(worldIn, SCP040JPCore.NEKOBLOCK.getDefaultState(), 2, y + 12, 2, structureBoundingBoxIn);
+            this.setBlockState(worldIn, SCP040JPCore.NEKOBLOCK.getDefaultState(), 3, y + 12, 2, structureBoundingBoxIn);
+            this.setBlockState(worldIn, SCP040JPCore.NEKOBLOCK.getDefaultState(), 2, y + 12, 3, structureBoundingBoxIn);
+            this.setBlockState(worldIn, SCP040JPCore.NEKOBLOCK.getDefaultState(), 3, y + 12, 3, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 1, y + 13, 1, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 1, y + 14, 1, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 4, y + 13, 1, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 4, y + 14, 1, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 1, y + 13, 4, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 1, y + 14, 4, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 4, y + 13, 4, structureBoundingBoxIn);
+            this.setBlockState(worldIn, iblockstate1, 4, y + 14, 4, structureBoundingBoxIn);
+            this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, y + 15, 1, 4, y + 15, 4, iblockstate, iblockstate,
+                    false);
 
             for (int i = 0; i <= 5; ++i) {
                 for (int j = 0; j <= 5; ++j) {
                     if (j == 0 || j == 5 || i == 0 || i == 5) {
-                        this.setBlockState(worldIn, iblockstate, j, 11, i, structureBoundingBoxIn);
-                        this.clearCurrentPositionBlocksUpwards(worldIn, j, 12, i, structureBoundingBoxIn);
+                        this.setBlockState(worldIn, iblockstate, j, y + 11, i, structureBoundingBoxIn);
+                        this.clearCurrentPositionBlocksUpwards(worldIn, j, y + 12, i, structureBoundingBoxIn);
                     }
                 }
             }
